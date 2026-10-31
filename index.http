@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Mercado Libre Uruguay</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js para gráficos interactivos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="h-full text-slate-800 flex flex-col antialiased selection:bg-amber-100 selection:text-amber-900">
+
+    <!-- Header / Navbar -->
+    <header class="bg-yellow-400 border-b border-yellow-500 shadow-sm sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-slate-900 text-yellow-400 p-2 rounded-xl shadow-inner flex items-center justify-center">
+                    <i data-lucide="calculator" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-slate-900 text-lg leading-tight">Calculadora ML Uruguay</h1>
+                    <p class="text-xs text-slate-800 font-medium">Precios, Comisiones y Ganancias</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-900 text-white shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    UYU ($)
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+            <!-- COLUMNA IZQUIERDA: FORMULARIO DE ENTRADA (5 cols) -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Tarjeta: Datos Básicos -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="dollar-sign" class="w-5 h-5 text-yellow-600"></i>
+                            <h2 class="font-semibold text-slate-900">Valores del Producto</h2>
+                        </div>
+                        <button id="btnReset" class="text-xs font-medium text-slate-500 hover:text-slate-800 flex items-center gap-1 transition-colors">
+                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Restablecer
+                        </button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Costo del Producto -->
+                        <div>
+                            <label for="costoProducto" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                                Costo del Producto ($ UYU)
+                            </label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-semibold">$</div>
+                                <input type="number" id="costoProducto" value="1064" min="0" step="1"
+                                    class="block w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-semibold focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-base transition-all">
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1">Lo que te cuesta producir o comprar la mercadería.</p>
+                        </div>
+
+                        <!-- Costo Mercado Envíos -->
+                        <div>
+                            <label for="costoEnvio" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                                Mercado Envíos (Envío gratis a tu cargo)
+                            </label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-semibold">$</div>
+                                <input type="number" id="costoEnvio" value="250" min="0" step="1"
+                                    class="block w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-semibold focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-base transition-all">
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1">Si ofrecés envío gratis o utilizás logística propia ($0 si no aplica).</p>
+                        </div>
+
+                        <!-- Ganancia Neta Deseada -->
+                        <div>
+                            <label for="gananciaDeseada" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                                Ganancia Neta Deseada (Limpio en mano)
+                            </label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-emerald-600 font-bold">$</div>
+                                <input type="number" id="gananciaDeseada" value="1000" min="0" step="1"
+                                    class="block w-full pl-8 pr-4 py-2.5 bg-emerald-50/50 border border-emerald-300 rounded-xl text-emerald-900 font-bold focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-base transition-all">
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1">Dinero neto libre de comisiones y costos que querés bolsillo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta: Costos Adicionales Editables -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="package-plus" class="w-5 h-5 text-indigo-600"></i>
+                            <h2 class="font-semibold text-slate-900">Costos Extra / Insumos</h2>
+                        </div>
+                        <button id="btnAddExtraCost" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar Costo
+                        </button>
+                    </div>
+
+                    <div id="extraCostsContainer" class="space-y-3">
+                        <!-- Los costos extra dinámicos se renderizan aquí -->
+                    </div>
+                    
+                    <div id="emptyCostsMsg" class="text-center py-4 text-slate-400 text-xs italic">
+                        No hay costos adicionales cargados. Hacé clic en "+ Agregar Costo" si tenés insumos, embalaje o impuestos extra.
+                    </div>
+                </div>
+
+                <!-- Tarjeta: Configuración de Tipo de Publicación -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-2 mb-4 border-b border-slate-100 pb-3">
+                        <i data-lucide="sliders" class="w-5 h-5 text-amber-600"></i>
+                        <h2 class="font-semibold text-slate-900">Tipo de Publicación & Comisiones</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Opciones Selector -->
+                        <div class="grid grid-cols-3 gap-2 p-1 bg-slate-100 rounded-xl" id="tipoPublicacionToggle">
+                            <button type="button" data-tipo="clasica" class="tipo-btn py-2 px-3 text-xs font-semibold rounded-lg transition-all shadow-sm bg-white text-slate-900">
+                                Clásica (13,42%)
+                            </button>
+                            <button type="button" data-tipo="premium" class="tipo-btn py-2 px-3 text-xs font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+                                Premium (20,74%)
+                            </button>
+                            <button type="button" data-tipo="personalizada" class="tipo-btn py-2 px-3 text-xs font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+                                Personalizado
+                            </button>
+                        </div>
+
+                        <!-- Info Tasa Seleccionada -->
+                        <div id="tasaInfoBox" class="p-3 bg-amber-50 rounded-xl border border-amber-200/60 text-xs text-amber-900 space-y-1">
+                            <div class="flex justify-between font-medium">
+                                <span>Comisión Base Mercado Libre:</span>
+                                <span id="lblComisionBase" class="font-bold">11,00%</span>
+                            </div>
+                            <div class="flex justify-between font-medium text-amber-800">
+                                <span>+ IVA de la comisión (22%):</span>
+                                <span id="lblIvaComision" class="font-bold">2,42%</span>
+                            </div>
+                            <div class="flex justify-between font-bold text-amber-950 border-t border-amber-200/80 pt-1 mt-1">
+                                <span>Tasa Efectiva Total Retenida:</span>
+                                <span id="lblTasaEfectiva">13,42%</span>
+                            </div>
+                        </div>
+
+                        <!-- Campos Personalizados (Ocultos por defecto) -->
+                        <div id="customRatesInputs" class="hidden space-y-3 pt-2 border-t border-slate-100">
+                            <div>
+                                <label for="customPorcentaje" class="block text-xs font-medium text-slate-600 mb-1">Comisión Base deseada (%)</label>
+                                <div class="relative">
+                                    <input type="number" id="customPorcentaje" value="11" min="0" max="100" step="0.1"
+                                        class="block w-full pr-8 pl-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-semibold">
+                                    <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-bold">%</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="incluirIvaCustom" checked class="w-4 h-4 text-amber-500 rounded border-slate-300 focus:ring-amber-400">
+                                <label for="incluirIvaCustom" class="text-xs text-slate-600">Aplicar IVA del 22% sobre esta comisión</label>
+                            </div>
+                        </div>
+
+                        <!-- Costo Fijo opcional por venta de bajo monto -->
+                        <div class="pt-2 border-t border-slate-100">
+                            <div class="flex items-center justify-between">
+                                <label for="costoFijoVenta" class="text-xs font-semibold text-slate-600">Costo Fijo por Venta (ML bajos precios)</label>
+                                <div class="w-32 relative">
+                                    <span class="absolute left-2.5 top-1.5 text-xs text-slate-400 font-bold">$</span>
+                                    <input type="number" id="costoFijoVenta" value="0" min="0" step="1"
+                                        class="w-full pl-6 pr-2 py-1 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-right">
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1">Aplica en productos de costo inferior a $1.700 según políticas de ML.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA: RESULTADOS Y GRÁFICOS (7 cols) -->
+            <div class="lg:col-span-7 space-y-6">
+
+                <!-- Tarjeta Principal: PRECIO SUGERIDO -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-yellow-400/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="absolute right-8 top-8 opacity-10">
+                        <i data-lucide="trending-up" class="w-32 h-32"></i>
+                    </div>
+
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-400 text-slate-950 uppercase tracking-wider">
+                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Precio a Publicar
+                            </span>
+                            <span id="badgeTipoPub" class="text-xs font-medium text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
+                                Clásica (13.42%)
+                            </span>
+                        </div>
+
+                        <div class="mt-4 mb-2">
+                            <div class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">Precio de Venta Final Sugerido</div>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-3xl sm:text-4xl font-extrabold text-yellow-400">$</span>
+                                <span id="resPrecioVenta" class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight">0</span>
+                                <span class="text-sm font-semibold text-slate-400 ml-1">UYU</span>
+                            </div>
+                        </div>
+
+                        <!-- Mini Métricas de Verificación -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-6 border-t border-slate-700/60 mt-6">
+                            <div>
+                                <span class="block text-[11px] text-slate-400 uppercase">Comisión Retenida</span>
+                                <span id="resComisionMeli" class="text-base sm:text-lg font-bold text-slate-200">$0</span>
+                            </div>
+                            <div>
+                                <span class="block text-[11px] text-slate-400 uppercase">Costo Total</span>
+                                <span id="resCostoTotalSumado" class="text-base sm:text-lg font-bold text-slate-200">$0</span>
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <span class="block text-[11px] text-emerald-400 uppercase font-semibold">Tu Ganancia Neta</span>
+                                <span id="resGananciaConfirmada" class="text-base sm:text-lg font-bold text-emerald-400">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla Desglose Detallado -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
+                    <h3 class="font-semibold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
+                        <i data-lucide="receipt" class="w-5 h-5 text-slate-600"></i> Desglose Financiero de la Venta
+                    </h3>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                    <th class="py-2.5 px-2">Concepto</th>
+                                    <th class="py-2.5 px-2 text-right">% del Precio</th>
+                                    <th class="py-2.5 px-2 text-right">Monto ($ UYU)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-700 font-medium">
+                                <tr>
+                                    <td class="py-3 px-2 flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Costo Producto Base
+                                    </td>
+                                    <td id="pctCostoProd" class="py-3 px-2 text-right text-slate-500 text-xs">0%</td>
+                                    <td id="valCostoProd" class="py-3 px-2 text-right font-semibold text-slate-900">$0</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-2 flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span> Mercado Envíos
+                                    </td>
+                                    <td id="pctCostoEnvio" class="py-3 px-2 text-right text-slate-500 text-xs">0%</td>
+                                    <td id="valCostoEnvio" class="py-3 px-2 text-right font-semibold text-slate-900">$0</td>
+                                </tr>
+                                <tr id="rowExtraCostsSummary" class="hidden">
+                                    <td class="py-3 px-2 flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> Costos Extra / Adicionales
+                                    </td>
+                                    <td id="pctCostosExtra" class="py-3 px-2 text-right text-slate-500 text-xs">0%</td>
+                                    <td id="valCostosExtra" class="py-3 px-2 text-right font-semibold text-slate-900">$0</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-2 flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Comisión Mercado Libre (Base)
+                                    </td>
+                                    <td id="pctComisionBase" class="py-3 px-2 text-right text-slate-500 text-xs">0%</td>
+                                    <td id="valComisionBase" class="py-3 px-2 text-right font-semibold text-slate-900">$0</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-2 flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> IVA de Comisión (22%)
+                                    </td>
+                                    <td id="pctIvaComision" class="py-3 px-2 text-right text-slate-500 text-xs">0%</td>
+                                    <td id="valIvaComision" class="py-3 px-2 text-right font-semibold text-slate-900">$0</td>
+                                </tr>
+                                <tr id="rowCostoFijoSummary" class="hidden">
+                                    <td class="py-3 px-2 flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span> Costo Fijo ML
+                                    </td>
+                                    <td id="pctCostoFijo" class="py-3 px-2 text-right text-slate-500 text-xs">0%</td>
+                                    <td id="valCostoFijo" class="py-3 px-2 text-right font-semibold text-slate-900">$0</td>
+                                </tr>
+                                <tr class="bg-emerald-50/60 font-bold text-slate-900">
+                                    <td class="py-3 px-2 flex items-center gap-2 text-emerald-800">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Ganancia Neta en Mano
+                                    </td>
+                                    <td id="pctGanancia" class="py-3 px-2 text-right text-emerald-700 text-xs">0%</td>
+                                    <td id="valGanancia" class="py-3 px-2 text-right text-emerald-700 font-extrabold">$0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tarjeta: Gráfico Visual -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
+                    <h3 class="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                        <i data-lucide="pie-chart" class="w-5 h-5 text-indigo-600"></i> Distribución del Precio Final
+                    </h3>
+                    
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="w-48 h-48 relative flex items-center justify-center">
+                            <canvas id="chartDistribucion"></canvas>
+                        </div>
+                        <div class="flex-1 w-full space-y-2" id="chartCustomLegend">
+                            <!-- Leyendas dinámicas -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer Simple -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+            Calculadora optimizada para Mercado Libre Uruguay &bull; IVA 22% sobre comisiones incluido en las tasas oficiales.
+        </div>
+    </footer>
+
+    <!-- LOGICA JS -->
+    <script>
+        // Inicializar Lucide Icons
+        lucide.createIcons();
+
+        // Variables de estado
+        let tipoSeleccionado = 'clasica'; // 'clasica', 'premium', 'personalizada'
+        let extraCostsCounter = 0;
+        let chartInstance = null;
+
+        // Elementos DOM principales
+        const inputCostoProducto = document.getElementById('costoProducto');
+        const inputCostoEnvio = document.getElementById('costoEnvio');
+        const inputGananciaDeseada = document.getElementById('gananciaDeseada');
+        const inputCostoFijoVenta = document.getElementById('costoFijoVenta');
+        const inputCustomPorcentaje = document.getElementById('customPorcentaje');
+        const inputIncluirIvaCustom = document.getElementById('incluirIvaCustom');
+        const containerExtraCosts = document.getElementById('extraCostsContainer');
+        const emptyCostsMsg = document.getElementById('emptyCostsMsg');
+
+        // Inicializar evento
+        document.addEventListener('DOMContentLoaded', () => {
+            initEvents();
+            initChart();
+            calcular();
+        });
+
+        function initEvents() {
+            // Inputs numéricos cambio directo
+            [inputCostoProducto, inputCostoEnvio, inputGananciaDeseada, inputCostoFijoVenta, inputCustomPorcentaje].forEach(input => {
+                input.addEventListener('input', calcular);
+            });
+
+            inputIncluirIvaCustom.addEventListener('change', calcular);
+
+            // Toggle Tipo Publicación
+            document.querySelectorAll('.tipo-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.tipo-btn').forEach(b => {
+                        b.classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
+                        b.classList.add('text-slate-600');
+                    });
+
+                    const target = e.currentTarget;
+                    target.classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+                    target.classList.remove('text-slate-600');
+
+                    tipoSeleccionado = target.getAttribute('data-tipo');
+                    
+                    const customInputs = document.getElementById('customRatesInputs');
+                    if (tipoSeleccionado === 'personalizada') {
+                        customInputs.classList.remove('hidden');
+                    } else {
+                        customInputs.classList.add('hidden');
+                    }
+
+                    calcular();
+                });
+            });
+
+            // Botón restablecer
+            document.getElementById('btnReset').addEventListener('click', () => {
+                inputCostoProducto.value = 1064;
+                inputCostoEnvio.value = 250;
+                inputGananciaDeseada.value = 1000;
+                inputCostoFijoVenta.value = 0;
+                containerExtraCosts.innerHTML = '';
+                checkEmptyExtraCosts();
+                calcular();
+            });
+
+            // Botón agregar costo extra
+            document.getElementById('btnAddExtraCost').addEventListener('click', addExtraCostRow);
+        }
+
+        function addExtraCostRow() {
+            extraCostsCounter++;
+            const rowId = `extra-cost-${extraCostsCounter}`;
+            
+            const div = document.createElement('div');
+            div.id = rowId;
+            div.className = 'flex items-center gap-2 animation-fade-in';
+            div.innerHTML = `
+                <input type="text" placeholder="Ej: Embalaje / Caja" class="extra-cost-name block w-1/2 px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-1 focus:ring-indigo-500">
+                <div class="relative w-1/2">
+                    <span class="absolute left-2.5 top-1.5 text-xs text-slate-400 font-bold">$</span>
+                    <input type="number" value="0" min="0" step="1" class="extra-cost-value block w-full pl-6 pr-2 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-indigo-500">
+                </div>
+                <button type="button" class="btn-remove-cost text-slate-400 hover:text-red-500 p-1.5 rounded-lg transition-colors">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            `;
+
+            containerExtraCosts.appendChild(div);
+            lucide.createIcons();
+
+            // Eventos para la nueva fila
+            div.querySelector('.extra-cost-value').addEventListener('input', calcular);
+            div.querySelector('.extra-cost-name').addEventListener('input', calcular);
+            div.querySelector('.btn-remove-cost').addEventListener('click', () => {
+                div.remove();
+                checkEmptyExtraCosts();
+                calcular();
+            });
+
+            checkEmptyExtraCosts();
+            calcular();
+        }
+
+        function checkEmptyExtraCosts() {
+            if (containerExtraCosts.children.length === 0) {
+                emptyCostsMsg.classList.remove('hidden');
+            } else {
+                emptyCostsMsg.classList.add('hidden');
+            }
+        }
+
+        function obtenerSumatoriaCostosExtra() {
+            let total = 0;
+            const rows = containerExtraCosts.querySelectorAll('.extra-cost-value');
+            rows.forEach(input => {
+                const val = parseFloat(input.value) || 0;
+                total += val;
+            });
+            return total;
+        }
+
+        function calcular() {
+            // Parsear datos de entrada
+            const costoProd = parseFloat(inputCostoProducto.value) || 0;
+            const costoEnvio = parseFloat(inputCostoEnvio.value) || 0;
+            const gananciaDeseada = parseFloat(inputGananciaDeseada.value) || 0;
+            const costoFijo = parseFloat(inputCostoFijoVenta.value) || 0;
+            const costosExtra = obtenerSumatoriaCostosExtra();
+
+            // Determinar Tasas de Comisión
+            let comisionBasePct = 0; // Porcentaje base (ej: 11%)
+            let ivaPct = 0.22; // 22% sobre la comisión
+
+            if (tipoSeleccionado === 'clasica') {
+                comisionBasePct = 11.0;
+            } else if (tipoSeleccionado === 'premium') {
+                comisionBasePct = 17.0;
+            } else {
+                comisionBasePct = parseFloat(inputCustomPorcentaje.value) || 0;
+                if (!inputIncluirIvaCustom.checked) {
+                    ivaPct = 0;
+                }
+            }
+
+            // Tasa comision final efectiva (incluyendo IVA de la comision)
+            const comisionBaseDecimal = comisionBasePct / 100;
+            const ivaSobreComisionDecimal = comisionBaseDecimal * ivaPct;
+            const tasaEfectivaTotalDecimal = comisionBaseDecimal + ivaSobreComisionDecimal;
+
+            // Actualizar labels de tasa en formulario
+            document.getElementById('lblComisionBase').textContent = `${comisionBasePct.toFixed(2)}%`;
+            document.getElementById('lblIvaComision').textContent = `${(ivaSobreComisionDecimal * 100).toFixed(2)}%`;
+            document.getElementById('lblTasaEfectiva').textContent = `${(tasaEfectivaTotalDecimal * 100).toFixed(2)}%`;
+
+            // FÓRMULA FINANCIERA PARA PRECIO DE VENTA ($P$)
+            // P = (CostoProducto + CostoEnvio + CostosExtra + CostoFijo + GananciaDeseada) / (1 - TasaEfectivaTotal)
+            const subtotalACobrir = costoProd + costoEnvio + costosExtra + costoFijo + gananciaDeseada;
+            
+            let precioVentaFinal = 0;
+            if (tasaEfectivaTotalDecimal < 1) {
+                precioVentaFinal = subtotalACobrir / (1 - tasaEfectivaTotalDecimal);
+            }
+
+            // Cálculos exactos derivados
+            const montoComisionBase = precioVentaFinal * comisionBaseDecimal;
+            const montoIvaComision = montoComisionBase * ivaPct;
+            const montoTotalComisionMeli = montoComisionBase + montoIvaComision + costoFijo;
+            const gananciaNetaReal = precioVentaFinal - (costoProd + costoEnvio + costosExtra + montoTotalComisionMeli);
+
+            // Renderizar Resultados Principales
+            document.getElementById('resPrecioVenta').textContent = formatNumber(precioVentaFinal);
+            document.getElementById('resComisionMeli').textContent = `$${formatNumber(montoTotalComisionMeli)}`;
+            document.getElementById('resCostoTotalSumado').textContent = `$${formatNumber(costoProd + costoEnvio + costosExtra)}`;
+            document.getElementById('resGananciaConfirmada').textContent = `$${formatNumber(gananciaNetaReal)}`;
+
+            // Badge tipo publicación
+            const badgeTipo = document.getElementById('badgeTipoPub');
+            if (tipoSeleccionado === 'clasica') badgeTipo.textContent = `Clásica (13,42%)`;
+            else if (tipoSeleccionado === 'premium') badgeTipo.textContent = `Premium (20,74%)`;
+            else badgeTipo.textContent = `Personalizada (${(tasaEfectivaTotalDecimal * 100).toFixed(2)}%)`;
+
+            // Renderizar Tabla Desglose
+            const pct = (val) => precioVentaFinal > 0 ? ((val / precioVentaFinal) * 100).toFixed(1) + '%' : '0%';
+
+            document.getElementById('valCostoProd').textContent = `$${formatNumber(costoProd)}`;
+            document.getElementById('pctCostoProd').textContent = pct(costoProd);
+
+            document.getElementById('valCostoEnvio').textContent = `$${formatNumber(costoEnvio)}`;
+            document.getElementById('pctCostoEnvio').textContent = pct(costoEnvio);
+
+            // Costos Extra Fila
+            const rowExtra = document.getElementById('rowExtraCostsSummary');
+            if (costosExtra > 0) {
+                rowExtra.classList.remove('hidden');
+                document.getElementById('valCostosExtra').textContent = `$${formatNumber(costosExtra)}`;
+                document.getElementById('pctCostosExtra').textContent = pct(costosExtra);
+            } else {
+                rowExtra.classList.add('hidden');
+            }
+
+            // Costo Fijo Fila
+            const rowFijo = document.getElementById('rowCostoFijoSummary');
+            if (costoFijo > 0) {
+                rowFijo.classList.remove('hidden');
+                document.getElementById('valCostoFijo').textContent = `$${formatNumber(costoFijo)}`;
+                document.getElementById('pctCostoFijo').textContent = pct(costoFijo);
+            } else {
+                rowFijo.classList.add('hidden');
+            }
+
+            document.getElementById('valComisionBase').textContent = `$${formatNumber(montoComisionBase)}`;
+            document.getElementById('pctComisionBase').textContent = pct(montoComisionBase);
+
+            document.getElementById('valIvaComision').textContent = `$${formatNumber(montoIvaComision)}`;
+            document.getElementById('pctIvaComision').textContent = pct(montoIvaComision);
+
+            document.getElementById('valGanancia').textContent = `$${formatNumber(gananciaNetaReal)}`;
+            document.getElementById('pctGanancia').textContent = pct(gananciaNetaReal);
+
+            // Actualizar Gráfico Chart.js
+            updateChart({
+                costoProd,
+                costoEnvio,
+                costosExtra,
+                montoComisionBase,
+                montoIvaComision,
+                costoFijo,
+                gananciaNetaReal
+            }, precioVentaFinal);
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString('es-UY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('chartDistribucion').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Producto', 'Envío', 'Extra', 'Comisión ML', 'IVA ML', 'Costo Fijo', 'Ganancia'],
+                    datasets: [{
+                        data: [0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: [
+                            '#3b82f6', // blue-500
+                            '#06b6d4', // cyan-500
+                            '#a855f7', // purple-500
+                            '#f59e0b', // amber-500
+                            '#f97316', // orange-500
+                            '#f87171', // red-400
+                            '#10b981'  // emerald-500
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.label}: $${formatNumber(context.raw)}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart(data, total) {
+            if (!chartInstance) return;
+
+            const values = [
+                data.costoProd,
+                data.costoEnvio,
+                data.costosExtra,
+                data.montoComisionBase,
+                data.montoIvaComision,
+                data.costoFijo,
+                data.gananciaNetaReal
+            ];
+
+            chartInstance.data.datasets[0].data = values;
+            chartInstance.update();
+
+            // Renderizar leyenda externa limpia
+            const legendContainer = document.getElementById('chartCustomLegend');
+            const labels = [
+                { title: 'Costo Producto', val: data.costoProd, color: 'bg-blue-500' },
+                { title: 'Mercado Envíos', val: data.costoEnvio, color: 'bg-cyan-500' },
+                ...(data.costosExtra > 0 ? [{ title: 'Costos Extra', val: data.costosExtra, color: 'bg-purple-500' }] : []),
+                { title: 'Comisión ML', val: data.montoComisionBase, color: 'bg-amber-500' },
+                { title: 'IVA Comisión (22%)', val: data.montoIvaComision, color: 'bg-orange-500' },
+                ...(data.costoFijo > 0 ? [{ title: 'Costo Fijo ML', val: data.costoFijo, color: 'bg-red-400' }] : []),
+                { title: 'Ganancia Neta', val: data.gananciaNetaReal, color: 'bg-emerald-500' }
+            ];
+
+            legendContainer.innerHTML = labels.map(item => {
+                const pct = total > 0 ? ((item.val / total) * 100).toFixed(1) : 0;
+                return `
+                    <div class="flex items-center justify-between text-xs py-1 border-b border-slate-100 last:border-0">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full ${item.color}"></span>
+                            <span class="text-slate-600 font-medium">${item.title}</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 text-[11px]">${pct}%</span>
+                            <span class="font-semibold text-slate-900">$${formatNumber(item.val)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
