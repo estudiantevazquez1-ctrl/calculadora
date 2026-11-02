@@ -3,26 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Mercado Libre Uruguay Completa</title>
+    <title>Calculadora ML Uruguay</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="https://api.iconify.design/lucide:calculator.svg?color=%23eab308">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Chart.js para gráficos -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js para gráficos interactivos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
     </style>
 </head>
 <body class="h-full text-slate-800 flex flex-col antialiased selection:bg-amber-100 selection:text-amber-900">
 
-    <!-- Header -->
+    <!-- Header / Navbar -->
     <header class="bg-yellow-400 border-b border-yellow-500 shadow-sm sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -30,8 +44,8 @@
                     <i data-lucide="calculator" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-slate-900 text-lg leading-tight">Calculadora ML Uruguay Pro</h1>
-                    <p class="text-xs text-slate-800 font-medium">Margen Bidireccional, Descuentos % OFF & Comparativa</p>
+                    <h1 class="font-bold text-slate-900 text-lg leading-tight">Calculadora ML Uruguay</h1>
+                    <p class="text-xs text-slate-800 font-medium">Precios, Comisiones y Margen de Ganancia</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -43,19 +57,19 @@
         </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main Content Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
             <!-- COLUMNA IZQUIERDA: FORMULARIO (5 cols) -->
             <div class="lg:col-span-5 space-y-6">
                 
-                <!-- 1 y 2. Costos Base, Envío y Extras -->
+                <!-- Tarjeta: Valores Base del Producto -->
                 <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
                     <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
                         <div class="flex items-center gap-2">
-                            <i data-lucide="package" class="w-5 h-5 text-yellow-600"></i>
-                            <h2 class="font-semibold text-slate-900">Costos Operativos</h2>
+                            <i data-lucide="dollar-sign" class="w-5 h-5 text-yellow-600"></i>
+                            <h2 class="font-semibold text-slate-900">Valores del Producto</h2>
                         </div>
                         <button id="btnReset" class="text-xs font-medium text-slate-500 hover:text-slate-800 flex items-center gap-1 transition-colors">
                             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Restablecer
@@ -63,16 +77,17 @@
                     </div>
 
                     <div class="space-y-4">
-                        <!-- Costo Base ($0 por defecto) -->
+                        <!-- Costo Base -->
                         <div>
-                            <label for="costoBase" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                            <label for="costoProducto" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
                                 Costo Base del Producto ($ UYU)
                             </label>
                             <div class="relative rounded-xl shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-semibold">$</div>
-                                <input type="number" id="costoBase" value="0" min="0" step="1"
+                                <input type="number" id="costoProducto" value="0" min="0" step="1"
                                     class="block w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-semibold focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-base transition-all">
                             </div>
+                            <p class="text-[11px] text-slate-400 mt-1">Costo directo de adquisición o fabricación ($0 por defecto).</p>
                         </div>
 
                         <!-- Costo Mercado Envíos -->
@@ -85,11 +100,49 @@
                                 <input type="number" id="costoEnvio" value="250" min="0" step="1"
                                     class="block w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-semibold focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-base transition-all">
                             </div>
+                            <p class="text-[11px] text-slate-400 mt-1">Costo de envío gratis asumido por el vendedor.</p>
+                        </div>
+
+                        <!-- Ganancia Neta y Porcentaje Bidireccional -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="gananciaMonto" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                                    Ganancia ($ UYU)
+                                </label>
+                                <div class="relative rounded-xl shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-emerald-600 font-bold">$</div>
+                                    <input type="number" id="gananciaMonto" value="1000" min="0" step="10"
+                                        class="block w-full pl-7 pr-2 py-2.5 bg-emerald-50/50 border border-emerald-300 rounded-xl text-emerald-900 font-bold focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition-all">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="gananciaPct" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                                    Margen (%)
+                                </label>
+                                <div class="relative rounded-xl shadow-sm">
+                                    <input type="number" id="gananciaPct" value="400" min="0" step="1"
+                                        class="block w-full pl-3 pr-7 py-2.5 bg-emerald-50/50 border border-emerald-300 rounded-xl text-emerald-900 font-bold focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition-all">
+                                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-emerald-600 font-bold">%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Descuento Promocional % OFF -->
+                        <div>
+                            <label for="descuentoPct" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                                Descuento Promocional (% OFF)
+                            </label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <input type="number" id="descuentoPct" value="0" min="0" max="90" step="1"
+                                    class="block w-full pl-3 pr-8 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-semibold focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-base transition-all">
+                                <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400 font-bold">%</div>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1">Calcula el precio de lista original para ofrecer esta oferta.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Costos Extras Dinámicos -->
+                <!-- Tarjeta: Costos Extra -->
                 <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
                     <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
                         <div class="flex items-center gap-2">
@@ -97,194 +150,80 @@
                             <h2 class="font-semibold text-slate-900">Insumos y Costos Extra</h2>
                         </div>
                         <button id="btnAddExtraCost" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors">
-                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar Insumo
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Agregar
                         </button>
                     </div>
 
                     <div id="extraCostsContainer" class="space-y-3"></div>
+                    
                     <div id="emptyCostsMsg" class="text-center py-3 text-slate-400 text-xs italic">
-                        No hay insumos agregados. Haz clic en "+ Agregar Insumo" para sumar empaque, bolsa, etc.
-                    </div>
-                </div>
-
-                <!-- 3. Control Bidireccional Ganancia / Margen -->
-                <div class="bg-gradient-to-br from-emerald-900 to-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-md border border-emerald-700/50">
-                    <div class="flex items-center justify-between mb-3 border-b border-emerald-800/80 pb-2.5">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="coins" class="w-5 h-5 text-emerald-400"></i>
-                            <h2 class="font-semibold text-white">Ganancia y Margen Bidireccional</h2>
-                        </div>
-                        <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded uppercase">Sincronizado</span>
-                    </div>
-
-                    <p class="text-xs text-emerald-200/80 mb-4">Modifica el monto en pesos o el margen porcentual indistintamente; se actualizarán de forma recíproca.</p>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="gananciaDeseadaMonto" class="block text-xs font-semibold text-emerald-300 uppercase tracking-wider mb-1">
-                                Ganancia ($ UYU)
-                            </label>
-                            <div class="relative rounded-xl shadow-sm">
-                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-emerald-400 font-bold">$</div>
-                                <input type="number" id="gananciaDeseadaMonto" value="1000" min="0" step="1"
-                                    class="block w-full pl-8 pr-3 py-2.5 bg-emerald-950/80 border border-emerald-700 rounded-xl text-emerald-300 font-extrabold focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 text-base transition-all">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="gananciaDeseadaPorcentaje" class="block text-xs font-semibold text-emerald-300 uppercase tracking-wider mb-1">
-                                Margen s/ Costos (%)
-                            </label>
-                            <div class="relative rounded-xl shadow-sm">
-                                <input type="number" id="gananciaDeseadaPorcentaje" value="400" min="0" max="10000" step="0.1"
-                                    class="block w-full pl-3 pr-8 py-2.5 bg-emerald-950/80 border border-emerald-700 rounded-xl text-emerald-300 font-extrabold focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 text-base transition-all">
-                                <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-emerald-400 font-bold">%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. Descuento Promocional (% OFF) -->
-                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
-                    <div class="flex items-center gap-2 mb-3 border-b border-slate-100 pb-3">
-                        <i data-lucide="percent" class="w-5 h-5 text-rose-500"></i>
-                        <h2 class="font-semibold text-slate-900">Descuento Promocional (% OFF)</h2>
-                    </div>
-
-                    <div>
-                        <label for="descuentoPromo" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
-                            Oferta / Descuento a Aplicar
-                        </label>
-                        <div class="relative rounded-xl shadow-sm">
-                            <input type="number" id="descuentoPromo" value="0" min="0" max="95" step="1"
-                                class="block w-full pl-4 pr-10 py-2.5 bg-rose-50/50 border border-rose-200 rounded-xl text-rose-900 font-extrabold focus:ring-2 focus:ring-rose-500 focus:border-rose-500 text-base transition-all">
-                            <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-rose-500 font-bold">% OFF</div>
-                        </div>
-                        <p class="text-[11px] text-slate-400 mt-1">Calcula el precio de lista tachado asegurando que obtengas tu ganancia neta exacta tras el descuento.</p>
+                        Sin insumos extra cargados (cajas, embalaje, impuestos).
                     </div>
                 </div>
 
             </div>
 
-            <!-- COLUMNA DERECHA: RESULTADOS, COMPARATIVA Y GRÁFICO (7 cols) -->
+            <!-- COLUMNA DERECHA: RESULTADOS Y GRÁFICO (7 cols) -->
             <div class="lg:col-span-7 space-y-6">
 
-                <!-- Panel de Precios Destacados -->
-                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-yellow-400/10 rounded-full blur-2xl pointer-events-none"></div>
-
-                    <div class="relative z-10">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-400 text-slate-950 uppercase tracking-wider">
-                                <i data-lucide="tag" class="w-3.5 h-3.5"></i> Sugerencia Principal (Clásica)
-                            </span>
-                            <span id="badgeTipoPub" class="text-xs font-medium text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-                                Clásica (13.42% con IVA)
-                            </span>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 py-2">
-                            <!-- Precio de Lista -->
-                            <div class="bg-slate-800/60 rounded-2xl p-4 border border-slate-700/80">
-                                <div class="text-[11px] font-semibold text-rose-400 uppercase tracking-wider mb-1 flex items-center justify-between">
-                                    <span>Precio de Lista (A publicar)</span>
-                                    <span id="lblBadgeDiscount" class="hidden bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded text-[10px] font-bold">0% OFF</span>
-                                </div>
-                                <div class="flex items-baseline gap-1">
-                                    <span class="text-2xl font-bold text-rose-400">$</span>
-                                    <span id="resPrecioLista" class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">0</span>
-                                </div>
-                                <p class="text-[11px] text-slate-400 mt-1">Precio tachado con oferta en ML.</p>
-                            </div>
-
-                            <!-- Precio Final con Descuento -->
-                            <div class="bg-slate-800/60 rounded-2xl p-4 border border-slate-700/80">
-                                <div class="text-[11px] font-semibold text-yellow-400 uppercase tracking-wider mb-1">
-                                    Precio Final (Paga Comprador)
-                                </div>
-                                <div class="flex items-baseline gap-1">
-                                    <span class="text-2xl font-bold text-yellow-400">$</span>
-                                    <span id="resPrecioVenta" class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">0</span>
-                                </div>
-                                <p class="text-[11px] text-slate-400 mt-1">Monto cobrado al cliente final.</p>
-                            </div>
-                        </div>
-
-                        <!-- Mini Métricas -->
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-6 border-t border-slate-700/60 mt-4">
-                            <div>
-                                <span class="block text-[11px] text-slate-400 uppercase">Comisión Meli + IVA</span>
-                                <span id="resComisionMeli" class="text-base sm:text-lg font-bold text-slate-200">$0</span>
-                            </div>
-                            <div>
-                                <span class="block text-[11px] text-slate-400 uppercase">Costo Estructura</span>
-                                <span id="resCostoTotalSumado" class="text-base sm:text-lg font-bold text-slate-200">$0</span>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1">
-                                <span class="block text-[11px] text-emerald-400 uppercase font-semibold">Ganancia Neta Limpia</span>
-                                <span id="resGananciaConfirmada" class="text-base sm:text-lg font-bold text-emerald-400">$0</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. Tabla Comparativa Clásica vs Premium -->
+                <!-- Tabla Comparativa Principal -->
                 <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
-                    <h3 class="font-semibold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-                        <i data-lucide="columns" class="w-5 h-5 text-indigo-600"></i> Comparativa en Tiempo Real: Clásica vs Premium
-                    </h3>
+                    <h2 class="font-semibold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-yellow-600"></i> Comparativa Clásica vs. Premium
+                    </h2>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                        <table class="w-full text-left border-collapse text-sm">
                             <thead>
-                                <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[11px]">
-                                    <th class="py-2.5 px-2">Concepto</th>
-                                    <th class="py-2.5 px-2 text-right bg-amber-50/50 text-amber-900 font-bold rounded-t-lg">Clásica (13,42%)</th>
-                                    <th class="py-2.5 px-2 text-right bg-indigo-50/50 text-indigo-900 font-bold rounded-t-lg">Premium (20,74%)</th>
+                                <tr class="border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                    <th class="py-2.5 px-3">Concepto</th>
+                                    <th class="py-2.5 px-3 text-right">Clásica (13,42%)</th>
+                                    <th class="py-2.5 px-3 text-right">Premium (20,74%)</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100 font-medium">
-                                <tr class="bg-rose-50/40 font-bold">
-                                    <td class="py-2.5 px-2 text-rose-900">Precio Lista (A publicar)</td>
-                                    <td id="compPrecioListaClasica" class="py-2.5 px-2 text-right text-rose-700 font-extrabold">$0</td>
-                                    <td id="compPrecioListaPremium" class="py-2.5 px-2 text-right text-rose-700 font-extrabold">$0</td>
-                                </tr>
-                                <tr class="bg-slate-50/70 font-bold">
-                                    <td class="py-2.5 px-2">Precio Final (Comprador)</td>
-                                    <td id="compPrecioClasica" class="py-2.5 px-2 text-right text-slate-900">$0</td>
-                                    <td id="compPrecioPremium" class="py-2.5 px-2 text-right text-slate-900">$0</td>
+                            <tbody class="divide-y divide-slate-100 text-slate-700 font-medium">
+                                <tr class="bg-amber-50/40">
+                                    <td class="py-3 px-3 font-semibold text-slate-900">Precio de Lista (A publicar)</td>
+                                    <td id="tdListaClasica" class="py-3 px-3 text-right font-extrabold text-slate-900">$0</td>
+                                    <td id="tdListaPremium" class="py-3 px-3 text-right font-extrabold text-slate-900">$0</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-2.5 px-2 text-slate-600">Costo Operativo / Estructura</td>
-                                    <td id="compCostoTotalClasica" class="py-2.5 px-2 text-right text-slate-500">$0</td>
-                                    <td id="compCostoTotalPremium" class="py-2.5 px-2 text-right text-slate-500">$0</td>
+                                    <td class="py-3 px-3 font-semibold text-slate-900">Precio Final (Con Descuento)</td>
+                                    <td id="tdFinalClasica" class="py-3 px-3 text-right font-bold text-slate-800">$0</td>
+                                    <td id="tdFinalPremium" class="py-3 px-3 text-right font-bold text-slate-800">$0</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-2.5 px-2 text-amber-700">Comisión MeLi + IVA (22%)</td>
-                                    <td id="compMeliClasica" class="py-2.5 px-2 text-right font-semibold text-amber-800">$0</td>
-                                    <td id="compMeliPremium" class="py-2.5 px-2 text-right font-semibold text-indigo-800">$0</td>
+                                    <td class="py-3 px-3 text-slate-600">Comisión MeLi + IVA 22%</td>
+                                    <td id="tdComisionClasica" class="py-3 px-3 text-right text-rose-600 font-semibold">$0</td>
+                                    <td id="tdComisionPremium" class="py-3 px-3 text-right text-rose-600 font-semibold">$0</td>
                                 </tr>
-                                <tr class="bg-emerald-50/70 font-bold text-emerald-900">
-                                    <td class="py-2.5 px-2">Ganancia Neta en Mano</td>
-                                    <td id="compGananciaClasica" class="py-2.5 px-2 text-right text-emerald-700 font-extrabold">$0</td>
-                                    <td id="compGananciaPremium" class="py-2.5 px-2 text-right text-emerald-700 font-extrabold">$0</td>
+                                <tr>
+                                    <td class="py-3 px-3 text-slate-600">Costo de Envío Gratis</td>
+                                    <td id="tdEnvioClasica" class="py-3 px-3 text-right text-slate-600">$0</td>
+                                    <td id="tdEnvioPremium" class="py-3 px-3 text-right text-slate-600">$0</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-3 text-slate-600">Costo Producto + Extras</td>
+                                    <td id="tdCostosClasica" class="py-3 px-3 text-right text-slate-600">$0</td>
+                                    <td id="tdCostosPremium" class="py-3 px-3 text-right text-slate-600">$0</td>
+                                </tr>
+                                <tr class="bg-emerald-50/80 font-bold text-slate-900">
+                                    <td class="py-3 px-3 text-emerald-900">Ganancia Neta en Mano</td>
+                                    <td id="tdGananciaClasica" class="py-3 px-3 text-right text-emerald-700 font-extrabold">$0</td>
+                                    <td id="tdGananciaPremium" class="py-3 px-3 text-right text-emerald-700 font-extrabold">$0</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- 6. Gráfico Interactivo Chart.js -->
+                <!-- Tarjeta: Gráfico de Distribución -->
                 <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
                     <h3 class="font-semibold text-slate-900 mb-4 flex items-center gap-2">
                         <i data-lucide="pie-chart" class="w-5 h-5 text-indigo-600"></i> Distribución del Precio Final (Clásica)
                     </h3>
-                    
-                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                        <div class="w-48 h-48 relative flex items-center justify-center">
-                            <canvas id="chartDistribucion"></canvas>
-                        </div>
-                        <div class="flex-1 w-full space-y-2" id="chartCustomLegend"></div>
+                    <div class="w-full h-64 relative flex items-center justify-center">
+                        <canvas id="chartDistribucion"></canvas>
                     </div>
                 </div>
 
@@ -293,293 +232,183 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
-            Calculadora optimizada para Mercado Libre Uruguay &bull; IVA 22% sobre comisiones aplicado automáticamente.
+            Calculadora ML Uruguay &bull; Incluye 22% de IVA sobre la comisión de Mercado Libre.
         </div>
     </footer>
 
-    <!-- Lógica JavaScript -->
+    <!-- LÓGICA JAVASCRIPT -->
     <script>
         lucide.createIcons();
 
-        let extraCostsCounter = 0;
+        let extraCounter = 0;
         let chartInstance = null;
-        let isSyncing = false;
 
-        const inputCostoBase = document.getElementById('costoBase');
+        const inputCostoProducto = document.getElementById('costoProducto');
         const inputCostoEnvio = document.getElementById('costoEnvio');
-        const inputGananciaMonto = document.getElementById('gananciaDeseadaMonto');
-        const inputGananciaPorcentaje = document.getElementById('gananciaDeseadaPorcentaje');
-        const inputDescuentoPromo = document.getElementById('descuentoPromo');
+        const inputGananciaMonto = document.getElementById('gananciaMonto');
+        const inputGananciaPct = document.getElementById('gananciaPct');
+        const inputDescuentoPct = document.getElementById('descuentoPct');
         const containerExtraCosts = document.getElementById('extraCostsContainer');
         const emptyCostsMsg = document.getElementById('emptyCostsMsg');
 
         document.addEventListener('DOMContentLoaded', () => {
             initEvents();
-            initChart();
-            syncGananciaDesdeMonto();
             calcular();
         });
 
         function initEvents() {
-            [inputCostoBase, inputCostoEnvio, inputDescuentoPromo].forEach(input => {
-                input.addEventListener('input', () => {
-                    syncGananciaDesdeMonto();
-                    calcular();
-                });
-            });
-
-            inputGananciaMonto.addEventListener('input', () => {
-                if (isSyncing) return;
-                syncGananciaDesdeMonto();
-                calcular();
-            });
-
-            inputGananciaPorcentaje.addEventListener('input', () => {
-                if (isSyncing) return;
-                syncGananciaDesdePorcentaje();
-                calcular();
-            });
+            inputCostoProducto.addEventListener('input', syncFromMonto);
+            inputCostoEnvio.addEventListener('input', syncFromMonto);
+            inputGananciaMonto.addEventListener('input', syncFromMonto);
+            inputGananciaPct.addEventListener('input', syncFromPct);
+            inputDescuentoPct.addEventListener('input', calcular);
 
             document.getElementById('btnReset').addEventListener('click', () => {
-                inputCostoBase.value = 0;
+                inputCostoProducto.value = 0;
                 inputCostoEnvio.value = 250;
                 inputGananciaMonto.value = 1000;
-                inputDescuentoPromo.value = 0;
+                inputDescuentoPct.value = 0;
                 containerExtraCosts.innerHTML = '';
                 checkEmptyExtraCosts();
-                syncGananciaDesdeMonto();
-                calcular();
+                syncFromMonto();
             });
 
             document.getElementById('btnAddExtraCost').addEventListener('click', addExtraCostRow);
         }
 
-        function getCostoEstructura() {
-            const cBase = parseFloat(inputCostoBase.value) || 0;
-            const cEnvio = parseFloat(inputCostoEnvio.value) || 0;
-            const cExtras = obtenerSumatoriaCostosExtra();
-            return cBase + cEnvio + cExtras;
-        }
-
-        function syncGananciaDesdeMonto() {
-            isSyncing = true;
-            const costoEstructura = getCostoEstructura();
-            const montoGanancia = parseFloat(inputGananciaMonto.value) || 0;
-            
-            if (costoEstructura > 0) {
-                const pct = (montoGanancia / costoEstructura) * 100;
-                inputGananciaPorcentaje.value = pct.toFixed(1);
-            } else {
-                inputGananciaPorcentaje.value = 0;
-            }
-            isSyncing = false;
-        }
-
-        function syncGananciaDesdePorcentaje() {
-            isSyncing = true;
-            const costoEstructura = getCostoEstructura();
-            const pctGanancia = parseFloat(inputGananciaPorcentaje.value) || 0;
-            
-            const monto = (costoEstructura * pctGanancia) / 100;
-            inputGananciaMonto.value = Math.round(monto);
-            isSyncing = false;
-        }
-
         function addExtraCostRow() {
-            extraCostsCounter++;
+            extraCounter++;
             const div = document.createElement('div');
             div.className = 'flex items-center gap-2';
             div.innerHTML = `
-                <input type="text" placeholder="Ej: Bolsa / Empaque" class="extra-cost-name block w-1/2 px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-medium focus:ring-1 focus:ring-indigo-500">
+                <input type="text" placeholder="Insumo" class="block w-1/2 px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs">
                 <div class="relative w-1/2">
                     <span class="absolute left-2.5 top-1.5 text-xs text-slate-400 font-bold">$</span>
-                    <input type="number" value="0" min="0" step="1" class="extra-cost-value block w-full pl-6 pr-2 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-indigo-500">
+                    <input type="number" value="0" min="0" class="extra-cost-val block w-full pl-6 pr-2 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
                 </div>
-                <button type="button" class="btn-remove-cost text-slate-400 hover:text-red-500 p-1.5 rounded-lg transition-colors">
+                <button type="button" class="btn-remove text-slate-400 hover:text-rose-500 p-1">
                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                 </button>
             `;
-
             containerExtraCosts.appendChild(div);
             lucide.createIcons();
 
-            div.querySelector('.extra-cost-value').addEventListener('input', () => {
-                syncGananciaDesdeMonto();
-                calcular();
-            });
-            div.querySelector('.extra-cost-name').addEventListener('input', calcular);
-            div.querySelector('.btn-remove-cost').addEventListener('click', () => {
+            div.querySelector('.extra-cost-val').addEventListener('input', syncFromMonto);
+            div.querySelector('.btn-remove').addEventListener('click', () => {
                 div.remove();
                 checkEmptyExtraCosts();
-                syncGananciaDesdeMonto();
-                calcular();
+                syncFromMonto();
             });
 
             checkEmptyExtraCosts();
-            syncGananciaDesdeMonto();
-            calcular();
+            syncFromMonto();
         }
 
         function checkEmptyExtraCosts() {
-            if (containerExtraCosts.children.length === 0) {
-                emptyCostsMsg.classList.remove('hidden');
-            } else {
-                emptyCostsMsg.classList.add('hidden');
-            }
+            emptyCostsMsg.classList.toggle('hidden', containerExtraCosts.children.length > 0);
         }
 
-        function obtenerSumatoriaCostosExtra() {
+        function getExtraCostsSum() {
             let total = 0;
-            containerExtraCosts.querySelectorAll('.extra-cost-value').forEach(input => {
-                total += parseFloat(input.value) || 0;
+            document.querySelectorAll('.extra-cost-val').forEach(inp => {
+                total += parseFloat(inp.value) || 0;
             });
             return total;
         }
 
-        function calcularPrecioParaTasa(subtotal, tasaEfectivaDecimal) {
-            if (tasaEfectivaDecimal >= 1) return 0;
-            return subtotal / (1 - tasaEfectivaDecimal);
+        function syncFromMonto() {
+            const costoBase = parseFloat(inputCostoProducto.value) || 0;
+            const costoEnvio = parseFloat(inputCostoEnvio.value) || 0;
+            const extras = getExtraCostsSum();
+            const estructura = costoBase + costoEnvio + extras;
+            const gananciaMonto = parseFloat(inputGananciaMonto.value) || 0;
+
+            if (estructura > 0) {
+                inputGananciaPct.value = ((gananciaMonto / estructura) * 100).toFixed(1);
+            } else {
+                inputGananciaPct.value = 0;
+            }
+            calcular();
         }
 
-        function calcularPrecioListaOriginal(precioSugerido, pctDescuento) {
-            if (pctDescuento <= 0) return precioSugerido;
-            if (pctDescuento >= 100) return 0;
-            return precioSugerido / (1 - (pctDescuento / 100));
+        function syncFromPct() {
+            const costoBase = parseFloat(inputCostoProducto.value) || 0;
+            const costoEnvio = parseFloat(inputCostoEnvio.value) || 0;
+            const extras = getExtraCostsSum();
+            const estructura = costoBase + costoEnvio + extras;
+            const pct = parseFloat(inputGananciaPct.value) || 0;
+
+            inputGananciaMonto.value = Math.round((estructura * pct) / 100);
+            calcular();
         }
 
         function calcular() {
-            const costoBase = parseFloat(inputCostoBase.value) || 0;
+            const costoBase = parseFloat(inputCostoProducto.value) || 0;
             const costoEnvio = parseFloat(inputCostoEnvio.value) || 0;
-            const gananciaDeseada = parseFloat(inputGananciaMonto.value) || 0;
-            const pctDescuento = parseFloat(inputDescuentoPromo.value) || 0;
-            const costosExtra = obtenerSumatoriaCostosExtra();
-            const costoTotalEstructura = costoBase + costoEnvio + costosExtra;
+            const gananciaMonto = parseFloat(inputGananciaMonto.value) || 0;
+            const descuentoPct = parseFloat(inputDescuentoPct.value) || 0;
+            const extras = getExtraCostsSum();
 
-            const subtotalColectar = costoTotalEstructura + gananciaDeseada;
+            const costoTotal = costoBase + extras;
+            const subtotal = costoTotal + costoEnvio + gananciaMonto;
 
-            // Tasas oficiales Mercado Libre Uruguay (Comisión + 22% IVA)
-            const tasaClasica = 0.1342; // 11% + 22% IVA
-            const tasaPremium = 0.2074; // 17% + 22% IVA
+            const tasaClasica = 0.1342;
+            const tasaPremium = 0.2074;
 
-            // Clásica Principal
-            const precioVentaFinal = calcularPrecioParaTasa(subtotalColectar, tasaClasica);
-            const precioListaOriginal = calcularPrecioListaOriginal(precioVentaFinal, pctDescuento);
-            const montoTotalMeliClasica = precioVentaFinal * tasaClasica;
-            const gananciaReal = precioVentaFinal - (costoTotalEstructura + montoTotalMeliClasica);
+            const pFinalClasica = subtotal / (1 - tasaClasica);
+            const pFinalPremium = subtotal / (1 - tasaPremium);
 
-            // Render Panel Principal
-            document.getElementById('resPrecioLista').textContent = formatNumber(precioListaOriginal);
-            document.getElementById('resPrecioVenta').textContent = formatNumber(precioVentaFinal);
-            document.getElementById('resComisionMeli').textContent = `$${formatNumber(montoTotalMeliClasica)}`;
-            document.getElementById('resCostoTotalSumado').textContent = `$${formatNumber(costoTotalEstructura)}`;
-            document.getElementById('resGananciaConfirmada').textContent = `$${formatNumber(gananciaReal)}`;
+            const factorDesc = 1 - (descuentoPct / 100);
+            const pListaClasica = factorDesc > 0 ? pFinalClasica / factorDesc : pFinalClasica;
+            const pListaPremium = factorDesc > 0 ? pFinalPremium / factorDesc : pFinalPremium;
 
-            const badgeDiscount = document.getElementById('lblBadgeDiscount');
-            if (pctDescuento > 0) {
-                badgeDiscount.textContent = `${pctDescuento}% OFF`;
-                badgeDiscount.classList.remove('hidden');
-            } else {
-                badgeDiscount.classList.add('hidden');
-            }
+            const comisionClasica = pFinalClasica * tasaClasica;
+            const comisionPremium = pFinalPremium * tasaPremium;
 
-            // Comparativa Simultánea Clásica vs Premium
-            const precioClasica = calcularPrecioParaTasa(subtotalColectar, tasaClasica);
-            const precioListaClasica = calcularPrecioListaOriginal(precioClasica, pctDescuento);
-            const meliClasica = precioClasica * tasaClasica;
-            const gananciaClasica = precioClasica - (costoTotalEstructura + meliClasica);
+            document.getElementById('tdListaClasica').innerText = `$ ${Math.round(pListaClasica).toLocaleString()}`;
+            document.getElementById('tdListaPremium').innerText = `$ ${Math.round(pListaPremium).toLocaleString()}`;
 
-            const precioPremium = calcularPrecioParaTasa(subtotalColectar, tasaPremium);
-            const precioListaPremium = calcularPrecioListaOriginal(precioPremium, pctDescuento);
-            const meliPremium = precioPremium * tasaPremium;
-            const gananciaPremium = precioPremium - (costoTotalEstructura + meliPremium);
+            document.getElementById('tdFinalClasica').innerText = `$ ${Math.round(pFinalClasica).toLocaleString()}`;
+            document.getElementById('tdFinalPremium').innerText = `$ ${Math.round(pFinalPremium).toLocaleString()}`;
 
-            document.getElementById('compPrecioListaClasica').textContent = `$${formatNumber(precioListaClasica)}`;
-            document.getElementById('compPrecioListaPremium').textContent = `$${formatNumber(precioListaPremium)}`;
-            document.getElementById('compPrecioClasica').textContent = `$${formatNumber(precioClasica)}`;
-            document.getElementById('compPrecioPremium').textContent = `$${formatNumber(precioPremium)}`;
-            document.getElementById('compCostoTotalClasica').textContent = `$${formatNumber(costoTotalEstructura)}`;
-            document.getElementById('compCostoTotalPremium').textContent = `$${formatNumber(costoTotalEstructura)}`;
-            document.getElementById('compMeliClasica').textContent = `$${formatNumber(meliClasica)}`;
-            document.getElementById('compMeliPremium').textContent = `$${formatNumber(meliPremium)}`;
-            document.getElementById('compGananciaClasica').textContent = `$${formatNumber(gananciaClasica)}`;
-            document.getElementById('compGananciaPremium').textContent = `$${formatNumber(gananciaPremium)}`;
+            document.getElementById('tdComisionClasica').innerText = `$ ${Math.round(comisionClasica).toLocaleString()}`;
+            document.getElementById('tdComisionPremium').innerText = `$ ${Math.round(comisionPremium).toLocaleString()}`;
 
-            updateChart({
-                costoTotalEstructura,
-                montoTotalMeliClasica,
-                gananciaReal
-            }, precioVentaFinal);
+            document.getElementById('tdEnvioClasica').innerText = `$ ${Math.round(costoEnvio).toLocaleString()}`;
+            document.getElementById('tdEnvioPremium').innerText = `$ ${Math.round(costoEnvio).toLocaleString()}`;
+
+            document.getElementById('tdCostosClasica').innerText = `$ ${Math.round(costoTotal).toLocaleString()}`;
+            document.getElementById('tdCostosPremium').innerText = `$ ${Math.round(costoTotal).toLocaleString()}`;
+
+            document.getElementById('tdGananciaClasica').innerText = `$ ${Math.round(gananciaMonto).toLocaleString()}`;
+            document.getElementById('tdGananciaPremium').innerText = `$ ${Math.round(gananciaMonto).toLocaleString()}`;
+
+            renderChart(costoTotal, costoEnvio, comisionClasica, gananciaMonto);
         }
 
-        function formatNumber(num) {
-            return num.toLocaleString('es-UY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        function initChart() {
+        function renderChart(costo, envio, comision, ganancia) {
             const ctx = document.getElementById('chartDistribucion').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+
             chartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Costos (Base + Envío + Extra)', 'Comisión MeLi + IVA', 'Ganancia Neta'],
+                    labels: ['Costos Producto/Extras', 'Envío Gratis', 'Comisión ML + IVA', 'Ganancia Neta'],
                     datasets: [{
-                        data: [0, 0, 0],
-                        backgroundColor: ['#3b82f6', '#f59e0b', '#10b981'],
-                        borderWidth: 0
+                        data: [costo, envio, comision, ganancia],
+                        backgroundColor: ['#64748b', '#0284c7', '#e11d48', '#10b981']
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '70%',
                     plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return ` ${context.label}: $${formatNumber(context.raw)}`;
-                                }
-                            }
-                        }
+                        legend: { position: 'bottom' }
                     }
                 }
             });
-        }
-
-        function updateChart(data, total) {
-            if (!chartInstance) return;
-
-            chartInstance.data.datasets[0].data = [
-                data.costoTotalEstructura,
-                data.montoTotalMeliClasica,
-                data.gananciaReal
-            ];
-            chartInstance.update();
-
-            const legendContainer = document.getElementById('chartCustomLegend');
-            const labels = [
-                { title: 'Costos Operativos', val: data.costoTotalEstructura, color: 'bg-blue-500' },
-                { title: 'Comisión MeLi + IVA', val: data.montoTotalMeliClasica, color: 'bg-amber-500' },
-                { title: 'Ganancia Neta', val: data.gananciaReal, color: 'bg-emerald-500' }
-            ];
-
-            legendContainer.innerHTML = labels.map(item => {
-                const pct = total > 0 ? ((item.val / total) * 100).toFixed(1) : 0;
-                return `
-                    <div class="flex items-center justify-between text-xs py-1 border-b border-slate-100 last:border-0">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full ${item.color}"></span>
-                            <span class="text-slate-600 font-medium">${item.title}</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-slate-400 text-[11px]">${pct}%</span>
-                            <span class="font-semibold text-slate-900">$${formatNumber(item.val)}</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
         }
     </script>
 </body>
